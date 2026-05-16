@@ -1,16 +1,17 @@
 import pandas as pd
-from scipy.stats import ttest_ind
-
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 df = pd.read_csv("data.csv")
+X = df[['experience']]
+Y = df['salary']
 
-print("Descriptive Statistics:")
-print(df.describe())
+X_train,X_test,y_train,y_test = train_test_split(
+    X,Y, test_size = 0.2, random_state = 42
+)
+model = LinearRegression()
+model.fit(X_train,y_train)
 
-group1 = df[df['group'] == 'A']['salary']
-group2 = df[df['group'] == 'B']['salary']
+prediction = model.predict([[5]])
 
-t_stat , p_value = ttest_ind(group1,group2)
-
-print("\nT-Test Result:")
-print("T-Statistic:",t_stat)
-print("P-Value:",p_value)
+print("Predicted Salary for 5 years experience:")
+print(prediction)
